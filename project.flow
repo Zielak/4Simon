@@ -1,0 +1,26 @@
+{
+
+  project : {
+    name : '4Simond',
+    version : '1.0.0',
+    author : 'Darek Greenly',
+
+    app : {
+      name : '4Simon',
+      package : 'pl.zielak.4simon'
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+      }
+    },
+
+    files : {
+      config : 'config.json',
+      assets : 'assets/'
+    }
+
+  }
+
+}

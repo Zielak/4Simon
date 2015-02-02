@@ -1,0 +1,13 @@
+{
+    "colors": [
+        ["0xAA3333","0xFFAAAA","0x660000"],
+        ["0x33AA33","0xAAFFAA","0x006600"],
+        ["0x3333AA","0xAAAAFF","0x000066"],
+        ["0xAAAA33","0xFFFFAA","0x666600"]
+    ],
+
+    "window": {
+        "width": 600,
+        "height": 600
+    }
+}
