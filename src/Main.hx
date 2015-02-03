@@ -143,7 +143,7 @@ class Main extends luxe.Game
     function addText():Void
     {
         welcomeText = new Text({
-            bounds: new Rectangle(0,100,Luxe.screen.w, 100),
+            bounds: new Rectangle(0,50,Luxe.screen.w, 100),
             align: center,
             point_size: 16,
             text: 'Press [ENTER] to let Simon talk...',
