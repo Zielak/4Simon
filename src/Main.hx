@@ -6,6 +6,7 @@ import luxe.Color;
 import luxe.Rectangle;
 import luxe.Visual;
 
+import luxe.Text;
 
 
 
@@ -16,7 +17,8 @@ class Main extends luxe.Game
 
     var score:Int;
 
-
+    var welcomeText:Text;
+    var scoreText:Text;
 
 
     var playScene:Scene;
@@ -54,7 +56,7 @@ class Main extends luxe.Game
             for(i in 0...4){
                 simonColors[i] = new Array<Color>();
                 for(j in 0...3){
-                    simonColors[i][j] = new Color().rgb(config.runtime.colors[i][j]);
+                    simonColors[i][j] = new Color().rgb( Std.parseInt(config.runtime.colors[i][j]) );
                 }
             }
         }
@@ -109,6 +111,7 @@ class Main extends luxe.Game
         menuScene = new Scene('menu');
 
         addBackground();
+        addText();
 
         addSimon();
 
@@ -128,6 +131,33 @@ class Main extends luxe.Game
             }),
             color: turnColorSimon,
         });
+
+        Luxe.events.listen('simon.finished', function(e){
+            background.color = turnColorYou;
+        });
+        Luxe.events.listen('simon.turn', function(e){
+            background.color = turnColorSimon;
+        });
+    }
+
+    function addText():Void
+    {
+        welcomeText = new Text({
+            bounds: new Rectangle(0,100,Luxe.screen.w, 100),
+            align: center,
+            point_size: 16,
+            text: 'Press [ENTER] to let Simon talk...',
+            batcher: Luxe.renderer.batcher
+        });
+        
+        scoreText = new Text({
+            bounds: new Rectangle(10, 10, Luxe.screen.w-10, 30),
+            align: left,
+            point_size: 24,
+            text: 'SCORE: 0',
+        });
+        scoreText.visible = false;
+        score = 0;
     }
 
         // Adds clickable buttons of Simon
@@ -200,6 +230,7 @@ class Main extends luxe.Game
     function playGame():Void
     {
         playing = true;
+        welcomeText.visible = false;
         Luxe.events.fire('simon.turn');
     }
 

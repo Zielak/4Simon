@@ -9,10 +9,10 @@ import luxe.Visual;
 class Shine extends Component
 {
 
-    var shineTime:Float;
+    public var color:Color;
 
-    var lastColor:Color;
-    var newColor:Color;
+    var shineTime:Float;
+    var shineColor:Color;
 
     override public function new(_options:ShineOptions):Void
     {
@@ -21,17 +21,16 @@ class Shine extends Component
         shineTime = _options.time;
         if(_options.color != null)
         {
-            newColor = _options.color;
+            shineColor = _options.color;
         }else{
-            newColor = new Color().rgb(0xFFFFFF);
+            shineColor = new Color().rgb(0xCCCCCC);
         }
     }
 
 
     override function init():Void
     {
-        lastColor = cast(entity, Visual).color;
-        cast(entity, Visual).color = newColor;
+        color = shineColor;
     }
 
     override function update(dt:Float):Void
@@ -40,7 +39,6 @@ class Shine extends Component
 
         if(shineTime <=0)
         {
-            cast(entity, Visual).color = lastColor;
             remove('shine');
         }
     }

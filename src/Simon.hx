@@ -26,14 +26,16 @@ class Simon extends Entity
     {
         trace('simon.init()');
         simonSays = false;
+
         memory = new Array<Int>();
+        addToMemory(3);
+
         playerTurn = 0;
         simonTurn = 0;
-        addToMemory(4);
 
             // Timers for saying
         saying = 0;
-        interval = 0.5;
+        interval = 0.75;
 
         Luxe.events.listen('player.clicked', function(e:SimonButtonEvent){
             if(!simonSays){
@@ -42,8 +44,15 @@ class Simon extends Entity
         });
 
         Luxe.events.listen('simon.turn', function(e){
+            trace('simon.turn(e)');
             if(!simonSays){
                 startTalking();
+            }
+        });
+
+        Luxe.events.listen('simon.finished', function(e){
+            if(simonSays){
+                stopTalking();
             }
         });
 
@@ -67,23 +76,30 @@ class Simon extends Entity
     function startTalking():Void
     {
         trace('simon.startTalking()');
+
         simonSays = true;
         sayNext();
     }
+    function stopTalking():Void
+    {
+        simonSays = false;
+    }
     function sayNext():Void
     {
-        trace('simon.sayNext()');
-
-        simonTurn++;
-
-        if(simonTurn > memory.length)
+        if(simonTurn >= memory.length)
         {
+            trace('simon.sayNext() -> Stopped talking');
             Luxe.events.fire('simon.finished');
         }
+        else
+        {
+            saying = interval;
 
-        saying = interval;
+            trace('simon.sayNext() -> ${memory[simonTurn]}');
+            Luxe.events.fire('simon.says', {number: memory[simonTurn]});
+        }
 
-        Luxe.events.fire('simon.says', {number: memory[simonTurn]});
+        simonTurn++;
     }
 
 
@@ -92,13 +108,20 @@ class Simon extends Entity
 
     function playerSaid(btn:Int):Void
     {
+        trace('playerSaid(${btn})');
         if(memory[playerTurn] == btn)
         {
+            trace('player.said.good');
             Luxe.events.fire('player.said.good');
             playerTurn++;
+            if(playerTurn >= memory.length)
+            {
+                playerPassed();
+            }
         }
         else
         {
+            trace('player.said.bad -> memory[${playerTurn}] = ${memory[playerTurn]}');
             Luxe.events.fire('player.said.bad');
             playerFailed();
         }
@@ -118,9 +141,10 @@ class Simon extends Entity
 
     function playerPassed():Void
     {
+        trace('player.passed');
+        trace('####################################');
         Luxe.events.fire('player.passed');
         resetRound(true);
-        addToMemory(1);
     }
 
 
@@ -132,10 +156,12 @@ class Simon extends Entity
         if(passed)
         {
             playerTurn = 0;
+            simonTurn = 0;
             addToMemory(1);
         }
         else
         {
+            simonTurn = 0;
             playerTurn = 0;
         }
 
@@ -149,6 +175,7 @@ class Simon extends Entity
         {
             memory.push(Math.floor(Math.random()*4));
         }
+        trace('addToMemory -> ${memory}');
     }
 
 

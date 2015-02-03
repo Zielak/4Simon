@@ -48,6 +48,7 @@ class SimonButton extends Visual
             name: 'clickable',
             eventName: 'simon',
         });
+        clickable.enabled = false;
 
         overColor = _options.colorOver;
         downColor = _options.colorDown;
@@ -60,19 +61,23 @@ class SimonButton extends Visual
         add(clickable);
 
 
-        Luxe.events.listen('buttons.disable', function(e){
+        Luxe.events.listen('simon.turn', function(e){
             clickable.enabled = false;
+            color = downColor;
         });
-        Luxe.events.listen('buttons.enable', function(e){
+        Luxe.events.listen('simon.finished', function(e){
             clickable.enabled = true;
+            color = outColor;
         });
+
 
 
         Luxe.events.listen('simon.says', function(e:SimonButtonEvent){
             if(e.number == number){
+                trace('simon.says ${number} THATS ME!');
                 add(new components.Shine({
                     name: 'shine',
-                    time: 0.3,
+                    time: 0.5,
                 }));
             }
         });
@@ -80,13 +85,35 @@ class SimonButton extends Visual
 
     override function update(dt:Float):Void
     {
-        if(clickable.isDown && clickable.enabled){
-            color = downColor;
-            Luxe.events.fire('player.clicked', this.number);
-        }else if(clickable.isOver && clickable.enabled){
-            color = overColor;
+        if(clickable.enabled)
+        {
+            if(clickable.justClicked && clickable.isDown)
+            {
+                trace('BTN : clickable.justClicked number: ${this.number}');
+                Luxe.events.fire('player.clicked', {number:this.number});
+                color = downColor;
+            }
+
+            if (clickable.isOver && !clickable.isDown)
+            {
+                color = overColor;
+            }
+            else if (clickable.isDown)
+            {
+                color = downColor;
+            }
+            else
+            {
+                color = outColor;
+            }
         }else{
             color = outColor;
+        }
+
+
+        // Change color when shining
+        if(has('shine')){
+            color = get('shine').color;
         }
     }
 

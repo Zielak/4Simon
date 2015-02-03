@@ -19,6 +19,7 @@ class Clickable extends Component
 
     public var isOver:Bool = false;
     public var isDown:Bool = false;
+    public var justClicked:Bool = false;
     public var enabled:Bool = true;
 
     
@@ -38,16 +39,12 @@ class Clickable extends Component
 
     }
 
-    override function onfixedupdate(rate:Float):Void
+    override function update(dt:Float):Void
     {
-        // bounds.x = entity.pos.x;
-        // bounds.y = entity.pos.y;
-
-        // if(entity.transform.parent != null)
-        // {
-        //     bounds.x += entity.transform.parent.local.pos.x;
-        //     bounds.y += entity.transform.parent.local.pos.y;
-        // }
+        if(justClicked && isDown)
+        {
+            justClicked = false;
+        }
     }
 
     override public function onmousemove(event:MouseEvent):Void
@@ -66,6 +63,7 @@ class Clickable extends Component
     {
         if(isOver)
         {
+            justClicked = true;
             Luxe.events.fire(eventName+'.mouseclick', entity);
             isDown = true;
         }
@@ -73,7 +71,7 @@ class Clickable extends Component
 
     override public function onmouseup(event:MouseEvent):Void
     {
-        if(isDown = true)
+        if(isDown)
         {
             Luxe.events.fire(eventName+'.mouseup', entity);
             isDown = false;
