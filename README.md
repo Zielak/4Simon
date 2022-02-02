@@ -5,8 +5,8 @@
 This time, it's infinite Simon says game.
 
 
-More info: [http://zielak.pl/category/1gaw](http://zielak.pl/category/1gaw)
+More info: https://darekgreenly.com/tag/1gaw
 
 # Demo
 
-Play it on my blog: [http://zielak.pl/1gaw-4-simon-says#more-309](http://zielak.pl/1gaw-4-simon-says#more-309)
+Play it on my blog: https://darekgreenly.com/1gaw-4-simon-says#continue
